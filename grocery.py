@@ -16,9 +16,11 @@ def grocery(start,end,lang):
             with keep.presenting():
                 headers["User-Agent"] = str(x)
                 res = requests.get("https://www.talabat.com/_next/data/ec09ba93-d0ec-4885-8040-1fceffc350ea/vertical/vertical-area.json?countrySlug={}&vertical=groceries&areaId={}&areaSlug={}&page={}&lang={}".format(x["country_name"],x["area_id"],x["area_name"],page_number,lang),cookies=cookies,headers=headers)
-               
-                res = json.loads(res.text)
-                    
+                try:
+                    res = json.loads(res.text)
+                except:
+                    print("unable to parse json make sure you changed the cookies and headers in request_data.py file")
+                    return    
                 if  "pageProps" in res  and "vendors" in res["pageProps"] and len(res["pageProps"]["vendors"]) > 0:
                     print("adding")
                         

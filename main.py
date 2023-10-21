@@ -4,8 +4,6 @@ import time
 from wakepy import keep
 import json
 
-
-
 import pandas as pd
 from threading import Thread
 
@@ -55,6 +53,7 @@ def vendors(min:int,max:int,lang:str):
             while True: 
                 restaurants = get("https://www.talabat.com/_next/data/13792ef3-65fb-4264-8910-d31837343b84/listing.json?lang=en&countrySlug={}&areaId={}&areaSlug={}&page={}"
                                   .format(area["country_name"],area["area_id"],area["area_name"],page_number),area)   
+                
                 restaurants = json.loads(restaurants.text)
                 
                 if "pageProps" in restaurants and "data" in restaurants["pageProps"]:
