@@ -7,7 +7,8 @@ from fetcher import scrap_areas
 import pandas as pd
 from wakepy import keep
 from request_data import cookies,headers
-engine = create_engine("mysql+mysqldb://root@localhost/test1")
+engine = create_engine("mysql+mysqldb://root@localhost/test")
+
 def grocery(start,end,lang):
     try:
       for x in scrap_areas(start,end):
@@ -15,16 +16,16 @@ def grocery(start,end,lang):
         while True:
             with keep.presenting():
                 headers["User-Agent"] = str(x)
-                res = requests.get("https://www.talabat.com/_next/data/ec09ba93-d0ec-4885-8040-1fceffc350ea/vertical/vertical-area.json?countrySlug={}&vertical=groceries&areaId={}&areaSlug={}&page={}&lang={}".format(x["country_name"],x["area_id"],x["area_name"],page_number,lang),cookies=cookies,headers=headers)
+                res = requests.get("https://www.talabat.com/_next/data/manifests/listing.json?countrySlug={}&areaId={}&areaSlug={}&page={}".format(x["country_name"],x["area_id"],x["area_name"],page_number,lang),cookies=cookies,headers=headers)
                 try:
                     res = json.loads(res.text)
                 except:
-                    print("unable to parse json make sure you changed the cookies and headers in request_data.py file")
+                    print("unable to parse json. make sure you changed the cookies and headers in request_data.py file")
                     return    
-                if  "pageProps" in res  and "vendors" in res["pageProps"] and len(res["pageProps"]["vendors"]) > 0:
+                if  "pageProps" in res  and "data" in res["pageProps"] and len(res["pageProps"]["data"]) > 0:
                     print("adding")
                         
-                    df = pd.DataFrame(res["pageProps"]["vendors"],columns=["id","createdAt","name","rate","logo","heroImage","totalRatings","deliveryFee","avgDeliveryTime","deliveryTime","minimumOrderAmount"
+                    df = pd.DataFrame(res["pageProps"]["data"]["vendors"],columns=["id","createdAt","name","rate","logo","heroImage","totalRatings","deliveryFee","avgDeliveryTime","deliveryTime","minimumOrderAmount"
                                                                                             ,"isTalabatGO","branchId","branchSlug","branchName","cuisineString","menuUrl",
                                                                                             "view","promotionText","discountText","isNew",
                                                                                             "acceptCreditCard","acceptDebitCard","acceptCash",

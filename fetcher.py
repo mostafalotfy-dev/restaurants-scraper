@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 
 
 from request_data import headers,cookies
-engine = create_engine("mysql+mysqldb://root@localhost/test")
+
 def scrap_areas(min,max):
    
     for x in range(min,max):
