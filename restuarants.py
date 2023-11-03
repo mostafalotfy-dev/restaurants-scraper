@@ -6,7 +6,7 @@ import requests
 from fetcher import scrape_areas
 import pandas as pd
 from wakepy import keep
-from request_data import cookies, headers
+from request_data import cookies, headers,engine
 
 
 
