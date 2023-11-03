@@ -1,3 +1,5 @@
+from sqlalchemy import create_engine
+
 cookies = {
     "__cf_bm": "QcrHvdYSCTlji.WadlBWgjcnQdGu37C95pwa4auWHlk-1698943150-0-AYZ6ofgemSSpTaoMqe69dvdR7jJoNbIi7qQvTRBbCJe8ZB6hwmaCBpFMXgihJi8chXI/tlFIp8OYNP8GHiN7H8C10lCsDqKXv4bfCwah5CX8",
     "cf_clearance": "pS.tUs4CoiC5YR4q6VRYc5JRXR3Ewi3cOOt6efOlrUY-1698943056-0-1-fc50fec4.9992ad24.ab51a124-0.2.1698943056",
@@ -14,3 +16,4 @@ headers = {
 
     "Host": "www.talabat.com"
 }
+engine = create_engine("mysql+mysqldb://root@localhost/test")

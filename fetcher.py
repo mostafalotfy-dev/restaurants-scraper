@@ -1,12 +1,12 @@
 #! /bin/env python
 
 import requests
-from sqlalchemy import create_engine
+
 
 from request_data import headers, cookies
 
 
-def scrap_areas(min, max):
+def scrape_areas(min, max):
     for x in range(min, max):
 
         headers["User-Agent"] = str(x)
