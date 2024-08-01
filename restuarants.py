@@ -1,4 +1,3 @@
-import json
 from threading import Thread
 import time
 import requests
@@ -8,10 +7,7 @@ import pandas as pd
 from wakepy import keep
 from request_data import cookies, headers,engine
 
-
-
-
-def grocery(start, end, lang):
+def grocery(start:int, end:int, lang:str):
     for x in scrape_areas(start, end):
         page_number = 1
         while True:
@@ -30,8 +26,10 @@ def grocery(start, end, lang):
 
             if "pageProps" in res and "data" in res["pageProps"] and len(res["pageProps"]["data"]) > 0:
                 print("adding")
-
-                df = pd.DataFrame(res["pageProps"]["data"]["vendors"],
+                vendors = res["pageProps"]["data"]["vendors"]
+                for vendor in vendors:
+                    vendor.update({"area_id": x["area_id"]})
+                df = pd.DataFrame(vendors,
                                   columns=["id", "createdAt", "name", "rate", "logo", "heroImage",
                                            "totalRatings", "deliveryFee", "avgDeliveryTime", "deliveryTime",
                                            "minimumOrderAmount",
@@ -59,7 +57,8 @@ def grocery(start, end, lang):
                                            "shopArea",
                                            "shopCity",
                                            "isShopSponcered",
-                                           "verticalType"
+                                           "verticalType",
+                                           "area_id"
                                            ])
                 df.to_sql("rest_{}".format(lang), con=engine, if_exists="append", index=False)
                 page_number += 1
@@ -75,10 +74,7 @@ def grocery(start, end, lang):
 Thread(name="Talabat Restaurants Scraper EN 1", daemon=False, args=(1, 3000, "en"), target=grocery).start()
 Thread(name="Talabat Restaurants Scraper EN 2", daemon=False, args=(3001, 5000, "en"), target=grocery).start()
 Thread(name="Talabat Restaurants Scraper EN 3", daemon=False, args=(5001, 7000, "en"), target=grocery).start()
-Thread(name="Talabat Restaurants Scraper EN 4", daemon=False, args=(7001, 9000, "en"), target=grocery).start()
-Thread(name="Talabat Restaurants Scraper EN 5", daemon=False, args=(9001, 10000, "en"), target=grocery).start()
 Thread(name="Talabat Restaurants Scraper AR 1", daemon=False, args=(1, 3000, "ar"), target=grocery).start()
 Thread(name="Talabat Restaurants Scraper AR 2", daemon=False, args=(3001, 5000, "ar"), target=grocery).start()
 Thread(name="Talabat Restaurants Scraper AR 3", daemon=False, args=(5001, 7000, "ar"), target=grocery).start()
-Thread(name="Talabat Restaurants Scraper AR 4", daemon=False, args=(7001, 9000, "ar"), target=grocery).start()
-Thread(name="Talabat Restaurants Scraper AR 5", daemon=False, args=(9001, 10000, "ar"), target=grocery).start()
+
